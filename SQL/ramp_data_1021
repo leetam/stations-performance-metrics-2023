@@ -1,0 +1,11 @@
+SELECT
+  device_id,
+  start_time,
+  resolution,
+  metered_lane_volume
+FROM
+  ramps.aggregated_ramp_data
+WHERE
+  device_id = 10168 AND
+  resolution in ('01:00:00', '1 day') AND
+  start_time > '2019-01-01 00:00:00'
