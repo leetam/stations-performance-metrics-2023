@@ -86,9 +86,10 @@ body <- dashboardBody(
           "ramp_time_comp",
           label = "Historic Comparison",
           choices = list("None",
-                         "Past 4 years",
-                         "Past 4 months",
-                         "Past 4 weeks"),
+                         "Past 4 years"
+                         # "Past 4 months",
+                         # "Past 4 weeks"
+                         ),
           selected = "None"
         )
       )
@@ -99,6 +100,12 @@ body <- dashboardBody(
         width = NULL,
         plotlyOutput(
           "ramp_volume_figure"
+        )
+      ),
+      box(
+        width = NULL,
+        plotlyOutput(
+          "test_ramp_figure"
         )
       )
     )

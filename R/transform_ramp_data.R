@@ -30,3 +30,26 @@ hours <- ramp %>%
   distinct(time)
 
 # saveRDS(hours, "data/hours.rds")
+
+# test past four years calculation
+# four_years <- seq(from = as.numeric(year("2023-01-01 00:00:00")), 
+#                   to = as.numeric(year("2023-01-01 00:00:00"))-3)
+# four_months <- seq(from = as.numeric(month("2023-01-01 00:00:00")), 
+#                   to = as.numeric(month("2023-01-01 00:00:00"))-3)
+
+min_four_months <- as.Date("2023-01-01") %m-% months(3) 
+min_four_weeks <- as.Date("2023-01-01") - weeks(3)
+
+# test filters for historic comparisons
+four_years_data <- ramp_data %>%
+  filter(year(start_time) %in% four_years)
+four_months_data <- ramp_data %>%
+  filter(month(start_time) %in% four_months)
+
+filter_df <- ramp_data %>%
+  filter(Date >= min_four_months & Date <= "2023-01-01")
+
+test_ramp_df <-ramp_data %>%
+  mutate(datetime = make_datetime(2020, month(start_time), day(start_time),
+                                  hour(start_time), minute(start_time), second(start_time))
+  )

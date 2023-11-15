@@ -33,6 +33,20 @@ function(input, output, session) {
       summarise(mean_volume = mean(metered_lane_volume))
   })
   
+  ramp_data_historic <- reactive({
+    req(ramp_data_range_filters())
+    
+    four_years <- seq(from = as.numeric(year(input$ramp_daterange[1])), to = as.numeric(year(input$ramp_daterange[1]))- 3)
+    # four_months <- min(input$ramp_daterange %m-% months(3))
+    # four_weeks <- min(input$ramp_daterange - weeks(3))
+    
+    ramp_data_range_filters() %>%
+        filter(year %in% four_years)
+        # case_when(input$ramp_time_comp == "Past 4 Years" ~ filter(year(input$ramp_daterange[1]) %in% c(four_years)),
+        #           input$ramp_time_comp == "Past 4 Months" ~ filter(Date >= four_months & Date <= input$ramp_daterange[1]),
+        #           input$ramp_time_comp == "Past 4 Weeks" ~ filter(Date >= four_weeks & Date <= input$ramp_daterange[1])
+  })
+  
   output$ramp_volume_figure <- renderPlotly({
     {if(input$ramp_group == "No")
       ramp_data_range_filters() %>%
@@ -51,6 +65,19 @@ function(input, output, session) {
         ylab("Mean Metered Lane Volume") +
         theme(axis.text.x = element_text(angle = 45, hjust = 1))
     }
+  })
+  
+  output$test_ramp_figure <- renderPlotly({
+    {if(input$ramp_time_comp == "No")
+      ramp_data_range_filters() %>%
+        ggplot(aes(x = start_time, y = metered_lane_volume)) +
+        geom_bar(stat = "identity")
+      else
+        ramp_data_historic() %>%
+        mutate(datetime = make_datetime(2020, month(start_time), day(start_time), hour(start_time), minute(start_time), second(start_time))) %>%
+        ggplot(aes(x = start_time, y = metered_lane_volume, fill = "year")) +
+        geom_bar(stat = "identity", position = "jitter")
+      }
   })
     
 
