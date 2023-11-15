@@ -18,7 +18,7 @@ body <- dashboardBody(
       box(
         width = NULL,
         dateRangeInput(
-          "daterange",
+          "ramp_daterange",
           label = "Date Range:",
           start = "2023-01-01",
           end = "2023-01-01",
@@ -38,8 +38,8 @@ body <- dashboardBody(
       box(
         width = NULL,
         sliderInput(
-          "tod",
-          label = "Time of Day",
+          "ramp_timerange",
+          label = "Time Range",
           min = lubridate::origin,
           max = lubridate::origin + days(1) - seconds(1),
           value = c(lubridate::origin, lubridate::origin + days(1) - seconds(1)),
@@ -48,7 +48,36 @@ body <- dashboardBody(
           timezone = "+0000",
           ticks = T
         )
-        
+      ),
+      box(
+        width = NULL,
+        selectInput(
+          "ramp_resolution",
+          label = "Resolution",
+          choices = list("1 hour",
+                         "1 day"),
+          selected = 1)
+      ),
+      box(
+        width = NULL,
+        selectInput(
+          "ramp_group",
+          label = "Group",
+          choices = list("Yes",
+                         "No"),
+          selected = "No"
+        )
+      ),
+      box(
+        width = NULL,
+        checkboxGroupInput(
+          "ramp_lane",
+          label = "Lane(s)",
+          choices = list("All",
+                         1,
+                         2),
+          selected = "All"
+        )
       )
     )
   )
