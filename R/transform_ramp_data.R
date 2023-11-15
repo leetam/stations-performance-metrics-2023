@@ -20,9 +20,13 @@ ramp_dates$start_time <- ymd_hms(ramp_raw$start_time, tz = "US/Pacific")
 ramp <- ramp_dates %>%
   mutate(dow = wday(start_time, label = T),
          year = year(start_time))
+ramp$dow <- as.character(ramp$dow)
+ramp$Date <- as.Date(ramp$Date)
+ramp$time <- hms::as_hms(ramp$time)
 
+saveRDS(ramp, "data/ramp.rds")
 
 hours <- ramp %>%
   distinct(time)
 
-saveRDS(hours, "data/hours.rds")
+# saveRDS(hours, "data/hours.rds")

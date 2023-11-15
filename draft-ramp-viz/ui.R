@@ -13,6 +13,7 @@ header <- dashboardHeader(title = "Stations: Ramp DRAFT",
 body <- dashboardBody(
   
   fluidRow(
+    #### Select Filters ####
     column(
       width = 2,
       box(
@@ -20,10 +21,10 @@ body <- dashboardBody(
         dateRangeInput(
           "ramp_daterange",
           label = "Date Range:",
-          start = "2023-01-01",
-          end = "2023-01-01",
+          start = "2023-11-10",
+          end = "2023-11-10",
           min = "2019-01-01",
-          max = "2023-11-09"
+          max = "2023-11-10"
         )
       ),
       box(
@@ -54,7 +55,7 @@ body <- dashboardBody(
         selectInput(
           "ramp_resolution",
           label = "Resolution",
-          choices = list("1 hour",
+          choices = list("1 hour" = "01:00:00",
                          "1 day"),
           selected = 1)
       ),
@@ -78,10 +79,32 @@ body <- dashboardBody(
                          2),
           selected = "All"
         )
+      ),
+      box(
+        width = NULL,
+        selectInput(
+          "ramp_time_comp",
+          label = "Historic Comparison",
+          choices = list("None",
+                         "Past 4 years",
+                         "Past 4 months",
+                         "Past 4 weeks"),
+          selected = "None"
+        )
+      )
+    ),
+    column(
+      width = 10,
+      box(
+        width = NULL,
+        plotlyOutput(
+          "ramp_volume_figure"
+        )
       )
     )
   )
 )
+ 
 
 dashboardPage(
   header,
