@@ -82,16 +82,35 @@ body <- dashboardBody(
       ),
       box(
         width = NULL,
-        selectInput(
-          "ramp_time_comp",
-          label = "Historic Comparison",
-          choices = list("None",
-                         "Past 4 years"
-                         # "Past 4 months",
-                         # "Past 4 weeks"
-                         ),
-          selected = "None"
+        checkboxGroupInput(
+          "yn_historic",
+          label = "Include Historic Comparison?",
+          choices = list("No",
+                         "Yes (provide date range below)"),
+          selected = "No"
         )
+      ),
+      box(
+        width = NULL,
+        dateRangeInput(
+          "ramp_daterange_historic",
+          label = "Date Range for Historic Comparison:",
+          start = "2023-11-10",
+          end = "2023-11-10",
+          min = "2019-01-01",
+          max = "2023-11-10"
+        )
+        
+        # selectInput(
+        #   "ramp_time_comp",
+        #   label = "Historic Comparison",
+        #   choices = list("None",
+        #                  "Past 4 years"
+        #                  # "Past 4 months",
+        #                  # "Past 4 weeks"
+        #                  ),
+        #   selected = "None"
+        # )
       )
     ),
     column(

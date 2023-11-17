@@ -53,3 +53,40 @@ test_ramp_df <-ramp_data %>%
   mutate(datetime = make_datetime(2020, month(start_time), day(start_time),
                                   hour(start_time), minute(start_time), second(start_time))
   )
+
+ramp_data_range_filters <- ramp_data %>%
+  filter(Date >= "2023-01-01" & Date <= "2023-02-01",
+         # dow %in% c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"),
+         # time >= "00:00:00" & time <= "23:00:00",
+         resolution == "1 day") %>%
+  mutate(datetime = make_datetime(2020, month(start_time), day(start_time), 
+                                  hour(start_time), minute(start_time), second(start_time)),
+         df = "df1")
+  
+
+ramp_data_historic <- ramp_data %>%
+  filter(Date >= "2023-03-01" & Date <= "2023-04-01",
+         # dow %in% c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"),
+         # time >= "00:00:00" & time <= "23:00:00",
+         resolution == "1 day") %>%
+  mutate(datetime = make_datetime(2020, month(start_time), day(start_time), 
+                                  hour(start_time), minute(start_time), second(start_time)),
+         df = "df2")
+
+
+figure <- ramp_data_range_filters %>%
+  ggplot(aes(x = datetime, y = metered_lane_volume)) +
+  geom_bar(stat = "identity", fill = "purple") +
+  geom_bar(data = ramp_data_historic, aes(y = metered_lane_volume), stat = "identity") +
+  theme_bw() +
+  xlab(NULL) +
+  ylab("Metered Lane Volume") +
+  scale_x_datetime(breaks = make_datetime(2020, 1:12), labels = month.abb)
+figure
+
+comb_data <- bind_rows(ramp_data_range_filters, ramp_data_historic)
+
+figure2 <- comb_data %>%
+  ggplot(aes(x = datetime, y = metered_lane_volume, fill = df)) +
+  geom_bar(stat = "identity", position = "dodge")
+figure2
