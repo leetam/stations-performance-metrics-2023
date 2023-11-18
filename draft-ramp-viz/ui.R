@@ -79,28 +79,7 @@ body <- dashboardBody(
                          2),
           selected = "All"
         )
-      ),
-      box(
-        width = NULL,
-        checkboxGroupInput(
-          "yn_historic",
-          label = "Include Historic Comparison?",
-          choices = list("No",
-                         "Yes (provide date range below)"),
-          selected = "No"
-        )
-      ),
-      box(
-        width = NULL,
-        dateRangeInput(
-          "ramp_daterange_historic",
-          label = "Date Range for Historic Comparison:",
-          start = "2023-11-10",
-          end = "2023-11-10",
-          min = "2019-01-01",
-          max = "2023-11-10"
-        )
-        
+      )
         # selectInput(
         #   "ramp_time_comp",
         #   label = "Historic Comparison",
@@ -111,7 +90,7 @@ body <- dashboardBody(
         #                  ),
         #   selected = "None"
         # )
-      )
+      # )
     ),
     column(
       width = 10,
@@ -120,17 +99,41 @@ body <- dashboardBody(
         plotlyOutput(
           "ramp_volume_figure"
         )
-      ),
-      box(
-        width = NULL,
-        plotlyOutput(
-          "test_ramp_figure"
-        )
       )
+    )
+  ),
+  fluidRow(
+    column(width = 2,
+           box(
+             width = NULL,
+             selectInput(
+               "year_range",
+               label = "Year Range:",
+               choices = list(2019, 2020, 2021, 2022, 2023),
+               multiple = TRUE
+             )
+           ),
+           box(
+             width = NULL,
+             selectInput(
+               "month_range",
+               label = "Month Range:",
+               choices = list("Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+                              "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"),
+               multiple = TRUE
+             )
+           )
+    ),
+    column(width = 10,
+           box(
+             width = NULL,
+             plotlyOutput(
+               "test_ramp_figure"
+             )
+           )
     )
   )
 )
- 
 
 dashboardPage(
   header,

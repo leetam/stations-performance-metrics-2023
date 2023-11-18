@@ -65,7 +65,6 @@ function(input, output, session) {
 
     ramp_data_historic <- reactive({
       req(input$yn_historic)
-      
       ramp_data %>%
         filter(Date >= input$ramp_daterange_historic[1] & Date <= input$ramp_daterange_historic[2],
                dow %in% input$ramp_dow,
@@ -120,12 +119,8 @@ function(input, output, session) {
           xlab(NULL) +
           ylab("Metered Lane Volume") +
           scale_x_datetime(breaks = make_date_time(2020, 1:12), labels = month.abb)
-          
-          
       }
-      
       figure
-      
     })
     
   # output$test_ramp_figure <- renderPlotly({

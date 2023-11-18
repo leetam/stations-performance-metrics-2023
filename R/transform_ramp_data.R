@@ -87,6 +87,6 @@ figure
 comb_data <- bind_rows(ramp_data_range_filters, ramp_data_historic)
 
 figure2 <- comb_data %>%
-  ggplot(aes(x = datetime, y = metered_lane_volume, fill = df)) +
+  ggplot(aes(x = datetime, y = metered_lane_volume, fill = df, color = factor(year))) +
   geom_bar(stat = "identity", position = "dodge")
 figure2
