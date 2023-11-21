@@ -90,3 +90,27 @@ figure2 <- comb_data %>%
   ggplot(aes(x = datetime, y = metered_lane_volume, fill = df, color = factor(year))) +
   geom_bar(stat = "identity", position = "dodge")
 figure2
+
+#### historic comparison with 3 date range filters ####
+ramp_comp1 <- ramp %>%
+  filter(Date >= "2019-01-01" & Date < "2019-03-01",
+         resolution == "1 day") %>%
+  mutate(dataset = "df1")
+ramp_comp2 <- ramp %>%
+  filter(Date >= "2021-01-01" & Date < "2021-03-01",
+         resolution == "1 day") %>%
+  mutate(dataset = "df2")
+ramp_comp3 <- ramp %>%
+  filter(Date >= "2023-01-01" & Date < "2023-03-01",
+         resolution == "1 day") %>%
+  mutate(dataset = "df3")
+
+comp_set <- bind_rows(ramp_comp1, ramp_comp2, ramp_comp3) %>%
+  mutate(datetime = make_datetime(2020, month(start_time), day(start_time), 
+                                  hour(start_time), minute(start_time), second(start_time)))
+
+comp_set_fig <- comp_set %>%
+  ggplot(aes(x = datetime, y = metered_lane_volume, fill = dataset)) +
+  geom_bar(stat = "identity", position = "dodge")
+comp_set_fig
+  

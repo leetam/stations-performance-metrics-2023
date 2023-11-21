@@ -106,21 +106,50 @@ body <- dashboardBody(
     column(width = 2,
            box(
              width = NULL,
-             selectInput(
-               "year_range",
-               label = "Year Range:",
-               choices = list(2019, 2020, 2021, 2022, 2023),
-               multiple = TRUE
+             dateRangeInput(
+               "ramp_daterange_comp1",
+               label = "Date Range for Comparison 1:",
+               start = "2023-11-10",
+               end = "2023-11-10",
+               min = "2019-01-01",
+               max = "2023-11-10"
              )
+             # width = NULL,
+             # selectInput(
+             #   "year_range",
+             #   label = "Year Range:",
+             #   choices = list(2019, 2020, 2021, 2022, 2023),
+             #   multiple = TRUE
+             # )
            ),
            box(
              width = NULL,
-             selectInput(
-               "month_range",
-               label = "Month Range:",
-               choices = list("Jan", "Feb", "Mar", "Apr", "May", "Jun", 
-                              "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"),
-               multiple = TRUE
+             dateRangeInput(
+               "ramp_daterange_comp2",
+               label = "Date Range for Comparison 2:",
+               start = "2023-11-10",
+               end = "2023-11-10",
+               min = "2019-01-01",
+               max = "2023-11-10"
+             )
+             # width = NULL,
+             # selectInput(
+             #   "month_range",
+             #   label = "Month Range:",
+             #   choices = list("Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+             #                  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"),
+             #   multiple = TRUE
+             # )
+           ),
+           box(
+             width = NULL,
+             dateRangeInput(
+               "ramp_daterange_comp3",
+               label = "Date Range for Comparison 3:",
+               start = "2023-11-10",
+               end = "2023-11-10",
+               min = "2019-01-01",
+               max = "2023-11-10"
              )
            )
     ),
