@@ -7,7 +7,7 @@ library(lubridate)
 
 hours <- readRDS("data/hours.rds")
 
-header <- dashboardHeader(title = "Stations: Ramp DRAFT",
+header <- dashboardHeader(title = "Stations: Mainline DRAFT",
                           titleWidth = 450)
 
 body <- dashboardBody(
@@ -18,8 +18,40 @@ body <- dashboardBody(
       width = 2,
       box(
         width = NULL,
+        selectizeInput(
+          "main_quant_1",
+          label = "Quantity 1",
+          choices = list(
+            "volume",
+            "speed",
+            "occupancy",
+            "vmt",
+            "vht",
+            "traveltime",
+            "delay"
+          )
+        )
+      ),
+      box(
+        width = NULL,
+        selectizeInput(
+          "main_quant_2",
+          label = "Quantity 2",
+          choices = list(
+            "volume",
+            "speed",
+            "occupancy",
+            "vmt",
+            "vht",
+            "traveltime",
+            "delay"
+          )
+        )
+      ),
+      box(
+        width = NULL,
         dateRangeInput(
-          "ramp_daterange",
+          "main_daterange",
           label = "Date Range:",
           start = "2023-11-10",
           end = "2023-11-10",
@@ -30,7 +62,7 @@ body <- dashboardBody(
       box(
         width = NULL,
         checkboxGroupInput(
-          "ramp_dow",
+          "main_dow",
           label = "Days Of The Week",
           choices = c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"),
           selected = c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
@@ -39,7 +71,7 @@ body <- dashboardBody(
       box(
         width = NULL,
         sliderInput(
-          "ramp_timerange",
+          "main_timerange",
           label = "Time Range",
           min = lubridate::origin,
           max = lubridate::origin + days(1) - seconds(1),
@@ -53,7 +85,7 @@ body <- dashboardBody(
       box(
         width = NULL,
         selectInput(
-          "ramp_resolution",
+          "main_resolution",
           label = "Resolution",
           choices = list("1 hour" = "01:00:00",
                          "1 day"),
@@ -61,105 +93,39 @@ body <- dashboardBody(
       ),
       box(
         width = NULL,
+        checkboxGroupInput(
+          "ramp_lane",
+          label = "Lane(s)",
+          choices = list(1,
+                         2,
+                         3),
+          selected = c(1, 2, 3))
+        ),
+      box(
+        width = NULL,
         selectInput(
-          "ramp_group",
+          "main_group",
           label = "Group",
           choices = list("Yes",
                          "No"),
           selected = "No"
         )
-      ),
-      box(
-        width = NULL,
-        checkboxGroupInput(
-          "ramp_lane",
-          label = "Lane(s)",
-          choices = list("All",
-                         1,
-                         2),
-          selected = "All"
-        )
       )
-        # selectInput(
-        #   "ramp_time_comp",
-        #   label = "Historic Comparison",
-        #   choices = list("None",
-        #                  "Past 4 years"
-        #                  # "Past 4 months",
-        #                  # "Past 4 weeks"
-        #                  ),
-        #   selected = "None"
-        # )
-      # )
     ),
     column(
       width = 10,
       box(
         width = NULL,
         plotlyOutput(
-          "ramp_volume_figure"
+          "stations_level_figure"
+        )
+      ),
+      box(
+        width = NULL,
+        plotlyOutput(
+          "lane_level_figure"
         )
       )
-    )
-  ),
-  fluidRow(
-    column(width = 2,
-           box(
-             width = NULL,
-             dateRangeInput(
-               "ramp_daterange_comp1",
-               label = "Date Range for Comparison 1:",
-               start = "2023-11-10",
-               end = "2023-11-10",
-               min = "2019-01-01",
-               max = "2023-11-10"
-             )
-             # width = NULL,
-             # selectInput(
-             #   "year_range",
-             #   label = "Year Range:",
-             #   choices = list(2019, 2020, 2021, 2022, 2023),
-             #   multiple = TRUE
-             # )
-           ),
-           box(
-             width = NULL,
-             dateRangeInput(
-               "ramp_daterange_comp2",
-               label = "Date Range for Comparison 2:",
-               start = "2023-11-10",
-               end = "2023-11-10",
-               min = "2019-01-01",
-               max = "2023-11-10"
-             )
-             # width = NULL,
-             # selectInput(
-             #   "month_range",
-             #   label = "Month Range:",
-             #   choices = list("Jan", "Feb", "Mar", "Apr", "May", "Jun", 
-             #                  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"),
-             #   multiple = TRUE
-             # )
-           ),
-           box(
-             width = NULL,
-             dateRangeInput(
-               "ramp_daterange_comp3",
-               label = "Date Range for Comparison 3:",
-               start = "2023-11-10",
-               end = "2023-11-10",
-               min = "2019-01-01",
-               max = "2023-11-10"
-             )
-           )
-    ),
-    column(width = 10,
-           box(
-             width = NULL,
-             plotlyOutput(
-               "test_ramp_figure"
-             )
-           )
     )
   )
 )
