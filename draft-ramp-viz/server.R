@@ -36,10 +36,11 @@ function(input, output, session) {
     req(ramp_data_range_filters())
     ramp_data_range_filters() %>%
       {if(input$ramp_group == "Yes") group_by(., time) else .} %>%
-      summarise(mean_volume = mean(metered_lane_volume)) %>%
-      mutate(datetime = make_datetime(2020, month(start_time), day(start_time), 
-                                      hour(start_time), minute(start_time), second(start_time)),
-             dataset = "init")
+      summarise(mean_volume = mean(metered_lane_volume)) 
+    # %>%
+      # mutate(datetime = make_datetime(2020, month(start_time), day(start_time), 
+      #                                 hour(start_time), minute(start_time), second(start_time)),
+      #        dataset = "init")
   })
   
 #### Ramp volume figure ####
@@ -69,6 +70,8 @@ function(input, output, session) {
       # req(input$yn_historic)
       comp_1 <- ramp_data %>%
         filter(Date >= input$ramp_daterange_comp1[1] & Date <= input$ramp_daterange_comp1[2],
+               dow %in% input$ramp_dow,
+               time >= input$ramp_timerange[1] & time <= input$ramp_timerange[2],
                resolution == input$ramp_resolution) %>%
         mutate(dataset = paste0(as.character(input$ramp_daterange_comp1[1]), 
                                 "-", 
@@ -78,6 +81,8 @@ function(input, output, session) {
       
       comp_2 <- ramp_data %>%
         filter(Date >= input$ramp_daterange_comp2[1] & Date <= input$ramp_daterange_comp2[2],
+               dow %in% input$ramp_dow,
+               time >= input$ramp_timerange[1] & time <= input$ramp_timerange[2],
                resolution == input$ramp_resolution) %>%
         mutate(dataset = paste0(as.character(input$ramp_daterange_comp2[1]), 
                                 "-", 
@@ -87,6 +92,8 @@ function(input, output, session) {
       
       comp_3 <- ramp_data %>%
         filter(Date >= input$ramp_daterange_comp3[1] & Date <= input$ramp_daterange_comp3[2],
+               dow %in% input$ramp_dow,
+               time >= input$ramp_timerange[1] & time <= input$ramp_timerange[2],
                resolution == input$ramp_resolution) %>%
         mutate(dataset = paste0(as.character(input$ramp_daterange_comp3[1]), 
                                 "-", 
@@ -110,18 +117,35 @@ function(input, output, session) {
       #           input$ramp_time_comp == "Past 4 Weeks" ~ filter(Date >= four_weeks & Date <= input$ramp_daterange[1])
     # })
     
-    
+  
+#### Historic data grouping ####
+    ramp_data_hist_comp <- reactive({
+      req(ramp_data_historic())
+      ramp_data_historic() %>%
+        {if(input$ramp_group == "Yes") group_by(., dataset, time) else .} %>%
+        summarise(mean_volume = mean(metered_lane_volume))
+    })
+      
 #### Historic comparison figure ####
 
     output$test_ramp_figure <- renderPlotly({
       req(input$ramp_daterange_comp1)
       
-      figure <- ramp_data_historic() %>%
+      {if(input$ramp_group == "No")
+      ramp_data_historic() %>%
         ggplot(aes(x = datetime, y = metered_lane_volume, fill = dataset)) +
         geom_bar(stat = "identity", position = "dodge") +
         theme_bw() +
         xlab(NULL) +
         ylab("Metered Lane Volume")
+      else
+        ramp_data_hist_comp() %>%
+        ggplot(aes(x = time, y = mean_volume, fill = dataset)) +
+        geom_bar(stat = "identity", position = "dodge") +
+        theme_bw() +
+        xlab(NULL) +
+        ylab("Mean Metered Lane Volume")
+      }
     })
     # output$test_ramp_figure <- renderPlotly({
     #   if (input$ramp_group == "No" & input$yn_historic == "No") {
