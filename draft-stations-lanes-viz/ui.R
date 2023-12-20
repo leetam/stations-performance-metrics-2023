@@ -29,7 +29,8 @@ body <- dashboardBody(
             "vht",
             "traveltime",
             "delay"
-          )
+          ),
+          selected = "volume"
         )
       ),
       box(
@@ -45,7 +46,8 @@ body <- dashboardBody(
             "vht",
             "traveltime",
             "delay"
-          )
+          ),
+          selected = "speed"
         )
       ),
       box(
