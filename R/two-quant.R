@@ -66,7 +66,7 @@ onequant2 <- hchart(type = "chart") %>%
 onequant2
 
 
-selected_lane_data <- lane_data %>%
+selected_lane_data <- data %>%
   filter(detector_id == 100192) %>%
   select(starttime, resolution, date, time, dow,
          vmt, occupancy) %>%

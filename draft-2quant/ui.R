@@ -3,7 +3,7 @@ library(shiny)
 # library(leaflet)
 # library(DT)
 # library(plotly)
-# library(lubridate)
+library(lubridate)
 library(highcharter)
 
 hours <- readRDS("data/hours.rds")
