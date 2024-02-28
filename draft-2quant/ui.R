@@ -2,9 +2,10 @@ library(shinydashboard)
 library(shiny)
 # library(leaflet)
 # library(DT)
-# library(plotly)
+library(plotly)
 library(lubridate)
-library(highcharter)
+library(ggplot2)
+# library(highcharter)
 
 hours <- readRDS("data/hours.rds")
 
@@ -118,10 +119,16 @@ body <- dashboardBody(
       width = 10,
       box(
         width = NULL,
-        highchartOutput(
+        plotlyOutput(
           "twoquantchart1"
         )
       )
+      # box(
+      #   width = NULL,
+      #   highchartOutput(
+      #     "twoquantchart1"
+      #   )
+      # )
       # box(
       #   width = NULL,
       #   plotlyOutput(
