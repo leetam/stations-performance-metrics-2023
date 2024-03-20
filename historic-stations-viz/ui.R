@@ -2,9 +2,7 @@ library(shinydashboard)
 library(shiny)
 library(leaflet)
 library(DT)
-library(ggplot2)
-library(plotly)
-library(lubridate)
+
 
 header <- dashboardHeader(title = "Historic PORTAL Stations Map DRAFT")
 
