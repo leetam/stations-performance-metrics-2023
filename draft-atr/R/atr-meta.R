@@ -102,4 +102,6 @@ all_meta <- bind_rows(atr_meta_table, its_meta_table) %>%
   filter(!is.na(lat),
          !lat %in% c(-1, 0))
 
+all_meta$start_date <- lubridate::ymd_hms(all_meta$start_date)
+
 saveRDS(all_meta, "data/atr_its_map_meta.rds")
