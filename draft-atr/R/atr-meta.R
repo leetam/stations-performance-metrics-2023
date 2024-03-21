@@ -37,7 +37,7 @@ atr_stations_meta <- atr_meta_highway %>%
   mutate(locationtext = paste(description, agency_station_id),
          agency = "ODOT",
          agencyid = agency_station_id,
-         detectortype = "ATR") %>%
+         source = "ATR") %>%
   select(locationtext,
          highway,
          direction,
@@ -46,10 +46,60 @@ atr_stations_meta <- atr_meta_highway %>%
          agencyid = agency_station_id,
          lon = longitude,
          lat = latitude,
-         detectortype,
+         source,
          agency,
          region,
          lrs_id)
+
+atr_meta_table <- atr_stations_meta %>%
+  mutate(
+    start_date = "",
+    rampid = "",
+    stationid = seq(from = 20000, to = 20353)
+  ) %>%
+  select(
+    stationid,
+    agencyid,
+    milepost,
+    locationtext,
+    numberlanes,
+    agency,
+    highway,
+    direction,
+    source,
+    start_date,
+    rampid,
+    lon,
+    lat
+  )
   
-atr_detectors_meta <- atr_meta_highway %>%
-  
+map_meta <- readRDS("data/map_meta.rds")
+
+its_agency_id <- its_stations_meta %>%
+  select(stationid, agencyid)
+
+its_meta_table <- map_meta %>%
+  mutate(source = if_else(agency == "ODOT", "ITS", "")) %>%
+  left_join(its_agency_id, by = "stationid") %>%
+  select(
+    stationid,
+    agencyid,
+    milepost,
+    locationtext,
+    numberlanes,
+    agency,
+    highway = highwayname,
+    direction,
+    source,
+    start_date,
+    rampid = ramp_devices,
+    lon,
+    lat
+  )
+
+all_meta <- bind_rows(atr_meta_table, its_meta_table) %>%
+  arrange(highway) %>%
+  filter(!is.na(lat),
+         !lat %in% c(-1, 0))
+
+saveRDS(all_meta, "data/atr_its_map_meta.rds")
